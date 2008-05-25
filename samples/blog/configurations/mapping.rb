@@ -4,7 +4,7 @@ module Blog
 
     module Mapping
       extend Waves::Mapping
-      path %r{^/comments/?$}, :method => :post do
+      path '/comments', :method => :post do
         resource( :comment ) do
           controller { comment = create; redirect( "/entry/#{comment.entry.name}" ) }
         end
