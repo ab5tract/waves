@@ -5,9 +5,7 @@ module Blog
     module Mapping
       extend Waves::Mapping
       path '/comments', :method => :post do
-        resource( :comment ) do
-          controller { comment = create; redirect( "/entry/#{comment.entry.name}" ) }
-        end
+        redirect( named.get( :model => :entry, :name => controllers[:comment].create.name ) )
       end
       include Waves::Mapping::PrettyUrls::RestRules
       include Waves::Mapping::PrettyUrls::GetRules
