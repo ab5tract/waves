@@ -18,7 +18,7 @@ end
 Test::Views.module_eval do
   class Animal
     include Waves::Views::Mixin
-    def say( says ) "This animal says: '#{says}'" end
+    def say( :animal => says ) "This animal says: '#{says}'" end
   end
 end
 
@@ -27,13 +27,11 @@ specification "A developer may succinctly define a resource-based controller-vie
   before do
     mapping.clear
     path('/cow' ) do
-      resource( :animal ) { controller { cow } | view { | says | say( says ) } }
+      with(:animal).cow.and.render(:say)
     end
     
     path('/onager') do
-      resource( "cow" ) do
-        controller { redirect model_name }.call
-      end
+      redirect(:cow)
     end
   end
 

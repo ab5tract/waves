@@ -7,21 +7,20 @@ specification "A developer can register named mappings" do
     mapping.clear
     resource = /([\w\-]+)/
     name = /([\w\-\_\.\+\@]+)/
-    path [resource, name], 
-      :generator => generator(:show) { |resource,name| "/#{resource}/#{name}" } do 
+    path '/{resource}/{name}', :named => :show do
         "Works"
       end
   end
 
   specify "accessible via Waves.mapping.named" do
     
-    Waves.mapping.named.show("foo", "bar").should == "/foo/bar"
+    Waves.mapping.named.show( :resource => "foo", :name => "bar").should == "/foo/bar"
     
   end
   
   specify "accessible via Application.paths" do
     
-    Test.paths.show("foo", "bar").should == "/foo/bar"
+    Test.paths.show( :resource => "foo", :name => "bar").should == "/foo/bar"
     
   end
 

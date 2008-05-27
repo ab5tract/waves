@@ -6,11 +6,11 @@ specification "A developer can extract parameters from a request path or URL." d
   before do
     mapping.clear
 
-    path %r{/param/(\w+)} do |value|
+    path '/param/{value}' do |value|
       "You asked for: #{value}."
     end
 
-    url %r{http://localhost:(\d+)/port} do |port|
+    url 'http://localhost:{port}/port', :match => { :port => '(\d+)' } do |port|
       port
     end
 
