@@ -5,7 +5,7 @@ require 'layers/orm/sequel'
 module TestApplication
   include AutoCode
   module Configurations
-    module Development
+    class Development
       stub!(:database).and_return(:adapter => 'sqlite', :database => 'test.db')
     end
   end
@@ -14,23 +14,26 @@ module TestApplication
 end
 
 Waves << TestApplication
-Waves::Console.load( :mode => :development )
+# Waves::Console.load( :mode => :development )
 TA = TestApplication
 
-describe "An application module which includes the Sequel ORM layer should" do
+describe "An application module which includes the Sequel ORM layer" do
   
   wrap { rm_if_exist 'test.db' }
     
-  it "auto_create models that inherit from Sequel::Model" do
+  it "auto_creates models that inherit from Sequel::Model" do
     TA::Models::Default.superclass.should == Sequel::Model
   end
   
-  it "set the dataset to use the snake_case of the class name as the table name" do
-    TA::Models::Default.dataset.to_table_reference.should == "(SELECT * FROM defaults)"
+  it "sets the dataset to use the snake_case of the class name as the table name" do
+    TA::Models::Default.dataset.send(:to_table_reference).should =~ /SELECT.+FROM.+defaults+/
   end
   
-  it "provide accessor for database" do
+  it "provides an accessor for database" do
     TA.should.respond_to :database
   end
   
 end
+
+# Waves.instance_variable_set(:@application, nil)
+# raise Waves.application.inspect

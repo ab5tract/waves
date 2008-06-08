@@ -5,7 +5,7 @@ require 'rack'
 require 'daemons'
 require 'live_console'
 
-gem 'dyoder-autocode'
+# gem 'dyoder-autocode'
 require 'autocode'
 
 # for mimetypes only or when using as default handler
@@ -47,6 +47,7 @@ require 'runtime/response'
 require 'runtime/response_mixin'
 require 'runtime/response_proxy'
 require 'runtime/session'
+require 'runtime/blackboard'
 require 'runtime/configuration'
 
 # waves URI mapping
@@ -58,21 +59,20 @@ require 'controllers/mixin'
 require 'controllers/base'
 require 'views/mixin'
 require 'views/base'
-require 'renderers/mixin'
-require 'renderers/markaby'
 require 'helpers/tag_helper'
 require 'helpers/url_helper'
-require 'renderers/erubis'
 require 'helpers/common'
 require 'helpers/form'
 require 'helpers/formatting'
 require 'helpers/model'
 require 'helpers/view'
 require 'helpers/default'
+require 'helpers/asset_helper'
+require 'helpers/number_helper'
+require 'renderers/mixin'
+require 'renderers/erubis'
+require 'renderers/markaby'
 
-# waves test support
-require 'verify/mapping.rb'
-require 'verify/request.rb'
 
 # waves foundations / layers
 require 'layers/simple'
