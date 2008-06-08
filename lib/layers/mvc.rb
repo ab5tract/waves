@@ -21,14 +21,37 @@ module Waves
 
           auto_create_module( :Views ) do
             include AutoCode
+            
+            # rendering logic: mixin?
             auto_create_class true, Waves::Views::Base
             auto_load true, :directories => [ :views ]
           end
 
           auto_create_module( :Controllers ) do
             include AutoCode
-            auto_create_class true, Waves::Controllers::Base
+            
+            # this ought to be a mixin
+            const_set( :Default, Class.new( Waves::Controllers::Base ) ).module_eval do
+
+              def all; model.all; end
+
+              def find( name ); model[ :name => name ] or not_found; end
+
+              def create; model.create( attributes ); end
+
+              def update( name )
+                instance = find( name )
+                instance.set( attributes )
+                instance.save_changes
+              end
+
+              def delete( name ); find( name ).destroy; end
+
+            end
+
+            auto_create_class true, Default
             auto_load true, :directories => [ :controllers ]
+            
           end
 
           auto_create_module( :Helpers ) do
