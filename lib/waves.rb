@@ -7,6 +7,7 @@ require 'live_console'
 
 # gem 'dyoder-autocode'
 require 'autocode'
+require 'functor'
 
 # for mimetypes only or when using as default handler
 require 'mongrel'
@@ -32,7 +33,6 @@ require 'utilities/inflect'
 require 'utilities/proc'
 require 'utilities/hash'
 require 'utilities/attributes'
-require 'utilities/functor'
 # waves Runtime
 require 'dispatchers/base'
 require 'dispatchers/default'
@@ -51,6 +51,10 @@ require 'runtime/configuration'
 
 # waves URI mapping
 require 'mapping/mapping'
+require 'mapping/action'
+require 'mapping/pattern'
+require 'mapping/constraints'
+require 'mapping/descriptors'
 require 'resources/mixin'
 
 # waves mvc support
