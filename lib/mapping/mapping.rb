@@ -53,7 +53,7 @@ module Waves
         end
       end
     end  
-          
+
   end
 
 end

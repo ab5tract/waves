@@ -9,7 +9,7 @@ module Waves
       include Functor::Method
       
       attr_accessor :target, :pattern, :generator
-      
+
       def initialize( options )
         @keys = [] ; @target = options[ :target ]
         compile( options[ :pattern ] )
