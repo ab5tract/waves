@@ -5,7 +5,7 @@ require 'rack'
 require 'daemons'
 require 'live_console'
 
-# gem 'dyoder-autocode'
+gem 'dyoder-autocode'
 require 'autocode'
 
 # for mimetypes only or when using as default handler
@@ -21,6 +21,8 @@ require 'benchmark'
 # require 'memcache'
 require 'base64'
 
+require 'functor'
+
 # selected project-specific extensions
 require 'utilities/module'
 require 'utilities/string'
@@ -32,7 +34,6 @@ require 'utilities/inflect'
 require 'utilities/proc'
 require 'utilities/hash'
 require 'utilities/attributes'
-require 'utilities/functor'
 # waves Runtime
 require 'dispatchers/base'
 require 'dispatchers/default'
@@ -51,7 +52,12 @@ require 'runtime/configuration'
 
 # waves URI mapping
 require 'mapping/mapping'
+require 'mapping/action'
+require 'mapping/constraints'
+require 'mapping/descriptors'
+require 'mapping/pattern'
 require 'resources/mixin'
+require 'resources/proxy'
 
 # waves mvc support
 require 'controllers/mixin'
