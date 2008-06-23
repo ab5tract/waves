@@ -57,6 +57,7 @@ require 'mapping/action'
 require 'mapping/pattern'
 require 'mapping/constraints'
 require 'mapping/descriptors'
+require 'mapping/paths'
 require 'resources/mixin'
 require 'resources/proxy'
 
