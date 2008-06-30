@@ -10,6 +10,9 @@ module Waves
         @path = path
         @status = status
       end
+      def message
+        "location: #{@path} status: #{@status}"
+      end
     end
 
     # The Base dispatcher simply makes it easier to write dispatchers by inheriting
