@@ -24,7 +24,6 @@ gem = Gem::Specification.new do |gem|
       extensions live_console choice daemons rakegen functor ).each do |dep|
     gem.add_dependency dep
   end
-  gem.add_dependency('sequel', '>= 2.0.0')
   gem.add_dependency('dyoder-autocode', '>= 1.0.0')
   gem.add_dependency('dyoder-filebase', '>= 0.3.0')
   gem.add_dependency('functor', '>= 0.4.2')
