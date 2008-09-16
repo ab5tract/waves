@@ -49,7 +49,9 @@ module Waves
   # - log: takes a hash of parameters; see below for more
   # - host: the host to bind the server to (string)
   # - port: the port for the server to listen on (number)
-  # - ports: used by the cluster:start task for clustering servers (array of numbers)
+  # - ports: used by the cluster:start task for clustering servers (arr
+  # == Configuring The Rack Application
+  #ay of numbers)
   # - debug: true if running in "debug" mode, which automatically reloads code
   #
   # == Configuring The Rack Application
@@ -142,9 +144,13 @@ module Waves
     #   reloadable []
     class Default < Base
 
+<<<<<<< HEAD:lib/runtime/configuration.rb
       %w( host port ports log reloadable database session debug root synchronize? dependencies ).
 <<<<<<< HEAD:lib/runtime/configuration.rb
 =======
+=======
+      %w( host port ports log reloadable database session debug root synchronize? dependencies cache ).
+>>>>>>> 1833f51... Prettier than ever.:lib/runtime/configuration.rb
 
 >>>>>>> fd9f909... removed offending Dependencies class.:lib/runtime/configuration.rb
       each { |name| attribute(name) }
@@ -189,6 +195,7 @@ module Waves
       log :level => :info, :output => $stderr
       reloadable []
       dependencies []
+      cache {}
     end
   end
 end
