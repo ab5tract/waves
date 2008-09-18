@@ -1,32 +1,7 @@
 module Waves
 
   module Cache
-<<<<<<< HEAD:lib/cache/cache.rb
-    class API
-
-    # Exception classes
-    class KeyMissing < StandardError; end
-      
-<<<<<<< HEAD:lib/cache/cache.rb
-    # Class method to keep track of layers
-    @layers = {}
-    def self.layers(layer = nil, namespace = nil)
-      unless layer.nil?
-        @layers[layer] = namespace
-      else
-        @layers
-      end
-    end
-    
-=======
->>>>>>> 1847895... the strangeness must be understand... Waves::Cache -> Waves::Cache::API, Waves::Layers::Cache::File -> Waves::Cache::File, etc... but what happened to synchronize?:lib/cache/cache.rb
-    # Universal to all cache objects.
-    def [](key)
-      fetch(key)
-    end
-=======
     class IPI
->>>>>>> 1833f51... Prettier than ever.:lib/cache/cache-ipi.rb
 
       # Exception classes
       class KeyMissing < StandardError; end

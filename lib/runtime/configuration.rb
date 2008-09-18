@@ -144,15 +144,9 @@ module Waves
     #   reloadable []
     class Default < Base
 
-<<<<<<< HEAD:lib/runtime/configuration.rb
-      %w( host port ports log reloadable database session debug root synchronize? dependencies ).
-<<<<<<< HEAD:lib/runtime/configuration.rb
-=======
-=======
-      %w( host port ports log reloadable database session debug root synchronize? dependencies cache ).
->>>>>>> 1833f51... Prettier than ever.:lib/runtime/configuration.rb
 
->>>>>>> fd9f909... removed offending Dependencies class.:lib/runtime/configuration.rb
+      %w( host port ports log reloadable database session debug root synchronize? dependencies cache ).
+
       each { |name| attribute(name) }
 
       # Set the Rack handler, along with any specific options
