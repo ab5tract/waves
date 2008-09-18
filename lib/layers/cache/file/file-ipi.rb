@@ -20,6 +20,7 @@ module Waves
         raise ArgumentError, ":dir needs to not be nil" if config[:dir].nil?
         @directory = config[:dir]
         @cache = {}
+        @keys = []
       end
 
       ##* store(key, value, ttl = {}) *##
@@ -31,7 +32,7 @@ module Waves
 
           key_file = @directory / key
 
-          file = File.new(key_file,'w')
+          file = ::File.new(key_file,'w')
           Marshal.dump(@cache[key], file)
           file.close
           @cache.delete key
@@ -45,7 +46,7 @@ module Waves
 
           keys.each do |key|
             if @keys.include? key
-              File.delete(@directory / key)
+              ::File.delete(@directory / key)
               @keys.delete key
             else
               raise KeyMissing, "no key #{key} to delete"
@@ -59,7 +60,7 @@ module Waves
       def clear
         Waves.synchronize do
 
-          @keys.each {|key| File.delete(@directory / key) }
+          @keys.each {|key| ::File.delete(@directory / key) }
           @keys.clear
 
         end
@@ -69,8 +70,8 @@ module Waves
       def fetch(key)
         Waves.synchronize do
 
-          raise KeyMissing, "#{key} doesn't exist" unless File.exists?(@directory / key)
-          @cache[key] = Marshal.load File.new(@directory / key)
+          raise KeyMissing, "#{key} doesn't exist" unless ::File.exists?(@directory / key)
+          @cache[key] = Marshal.load ::File.new(@directory / key)
           return @cache[key][:value] if @cache[key][:expires].nil?
 
           if @cache[key][:expires] > Time.now

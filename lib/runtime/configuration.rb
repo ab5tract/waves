@@ -189,7 +189,7 @@ module Waves
       log :level => :info, :output => $stderr
       reloadable []
       dependencies []
-      cache {}
+      cache :dir => 'app-local/tmp'
     end
   end
 end
