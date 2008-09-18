@@ -10,28 +10,26 @@ module Waves
           args[:servers] = args[:server] unless args[:server].nil?
           raise ArgumentError, "need :servers to not be nil" if args[:servers].nil?
           args[:opt] = args.has_key?(:opt) ? args[:opt] : {}
-          $cache = ::Memcached.new(args[:servers], args[:opt])
+          @cache = ::Memcached.new(args[:servers], args[:opt])
 
       end
 
       def store(key,value, ttl = 0, marshal = true)
-        Waves.synchronize do
 
-          cache = $cache.clone
+          cache = @cache.clone
           cache.add(key.to_s,value,ttl,marshal)
           cache.destroy
 
-        end
       end
 
       def fetch(key)
-        Waves.synchronize do
+#        Waves.synchronize do
           
-          cache = $cache.clone
+          cache = @cache.clone
           cache.get(key.to_s)
           cache.destroy
 
-        end
+#        end
       rescue ::Memcached::NotFound => e
         # In order to keep the Memcached layer compliant with Waves::Cache...
         # ...we need to be able to expect that an absent key raises KeyMissing
@@ -39,36 +37,36 @@ module Waves
       end
 
       def delete(*keys)
-        Waves.synchronize do
+#        Waves.synchronize do
 
-          cache = $cache.clone
+          cache = @cache.clone
           keys.each {|key| cache.delete(key.to_s) }
           cache.destroy
 
-        end
+#        end
       end
 
       def clear
-        Waves.synchronize do
+#        Waves.synchronize do
 
-          cache = $cache.clone
+          cache = @cache.clone
           cache.flush
-          #cache.destroy
+          cache.destroy
 
-        end
+#        end
       end
 
       alias_method :add, :store   # Override our natural Waves::Cache :store method with Memcache's :add
       alias_method :get, :fetch   # Override our natural Waves::Cache :fetch method with Memcache's :get
 
       def method_missing(*args, &block)
-        Waves.synchronize do
+#        Waves.synchronize do
 
-          cache = $cache.clone
+          cache = @cache.clone
           cache.__send__(*args, &block)
           cache.destroy
 
-        end
+#        end
       rescue => e
         Waves::Logger.error e.to_s
         nil
