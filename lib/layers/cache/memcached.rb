@@ -17,7 +17,7 @@ module Waves
           
           if Waves.cache.nil?
             Waves.cache = Waves::Cache::Memcached.new( Waves.config.cache )
-            Waves::Logger.info "Using layer 'memcached' for Waves.cache"
+            Waves.log.info "Using layer 'memcached' for Waves.cache."
           end
           
         end

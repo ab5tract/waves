@@ -68,7 +68,7 @@ module Waves
 
 #        end
       rescue => e
-        Waves::Logger.error e.to_s
+        Waves.log.error e.to_s
         nil
       end
 
