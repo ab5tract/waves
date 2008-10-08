@@ -43,18 +43,19 @@ module Waves
         Waves.synchronize { @cache.clear }
       end
 
-      def fetch(key)    # :TODO: Should probably take a splat
+      def fetch(*keys)    # :TODO: Should probably take a splat
         Waves.synchronize do
-          return nil unless item = @cache[ key ]
-          if item[:expires] and item[:expires] < Time.now
-            @cache.delete( key )
+          f = Proc.new do |key|
+            return nil unless item = @cache[ key ]
+            if item[:expires] and item[:expires] < Time.now
+              @cache.delete( key )
+            end
+            item[:value]
           end
-          item[:value]
+          keys.respond_to?(:last) ? f.call(keys) : keys.each{|key| f.call(key) }
         end
-
       end
 
     end
   end
-
 end

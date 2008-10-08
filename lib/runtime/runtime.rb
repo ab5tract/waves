@@ -23,6 +23,9 @@ module Waves
     applications << app if Module === app
   end
 
+  # Waves.cache is set by the cache implementation
+  def self.cache(set=nil); set.nil? ? @cache : @cache = set;  end
+  
   # Returns the most recently created instance of Waves::Runtime.
   def self.instance ; Waves::Runtime.instance ; end
   
@@ -39,9 +42,6 @@ module Waves
 
     # Accessor for options passed to the runtime.
     attr_reader :options
-    
-    # Waves.cache is set by Cache Layers
-    attr_accessor :cache
 
     # Create a new Waves application instance.
     def initialize( options={} )

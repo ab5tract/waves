@@ -1,11 +1,11 @@
 module Waves
   module Layers
-    module Cache
+    module Caches
 
       module File
         
         def self.included(app)
-          require 'layers/cache/file/file-class'
+          require 'layers/caches/file/engine'
 
           if Waves.cache.nil?
             Waves.cache = Waves::Caches::File.new( Waves.config.cache )

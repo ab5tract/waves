@@ -45,7 +45,7 @@ require 'runtime/response'
 require 'runtime/response_mixin'
 require 'runtime/session'
 require 'runtime/configuration'
-require 'cache/cache'
+require 'caches/cache'
 
 # waves URI mapping
 require 'matchers/base'
