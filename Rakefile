@@ -32,7 +32,7 @@ gem = Gem::Specification.new do |gem|
 
 
   # Unfortunately there are some gems that don't work in JRuby, so...
-  case engine
+  case Kernel.engine
     when 'ruby'
     # Matz' Ruby dependencies here...
     puts "You are running MRI/Ruby #{RUBY_VERSION}"
