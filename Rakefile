@@ -147,7 +147,6 @@ namespace :verify do
       t.verbose = true
     end
   end
-  
 
 end
 
