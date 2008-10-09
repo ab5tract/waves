@@ -1,13 +1,13 @@
 require File.join(File.dirname(__FILE__) , "helpers")
 
-require 'cache/cache'
-require 'layers/cache/file/file-ipi'
+require 'caches/cache'
+require 'layers/cache/file/engine'
 
 module Waves
  def synchronize; @mutex ||= Mutex.new; end
 end
 
-describe "Waves::Cache::File" do
+describe "Waves::Caches::File" do
 
   before do
     FileUtils.mkdir '/tmp/waves_cache' unless File.exist?('/tmp/waves_cache')

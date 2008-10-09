@@ -32,7 +32,7 @@ gem = Gem::Specification.new do |gem|
 
 
   # All extensions cannot build everywhere...
-  case engine
+  case Kernel.engine
     when 'ruby'
     # Matz' Ruby dependencies here...
     puts "You are running MRI/Ruby #{RUBY_VERSION}"
