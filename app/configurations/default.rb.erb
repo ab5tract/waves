@@ -1,10 +1,8 @@
 module <%= @name %>
   module Configurations
-    class Default
-      
-      resources do
-        
-      end      
+    class Default  < Waves::Configurations::Default      
+    #  Unsure of the status of the following line....
+	#  resource <%= @name %>::Resources::Map
       
     end
   end
