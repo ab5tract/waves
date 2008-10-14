@@ -3,18 +3,24 @@ require 'rubygems'
 require 'choice'
 require 'rakegen'
 
+
+
 # if we're in the waves source, prepend it to the load path
 # waves_lib = File.expand_path( "#{File.dirname(__FILE__)}/../../waves/lib" )
 # $:.unshift waves_lib if File.exist?(waves_lib)
 # require 'waves'
+ 
+WAVES = "#{File.dirname(__FILE__)}/.."
+ 
+require File.join(WAVES, 'lib', 'ext', 'string' )
+require File.join(WAVES, 'bin', 'scripts', 'generate')
 
-WAVES = "#{File.dirname(__FILE__)}/.." 
-
-require File.join(WAVES, 'lib', 'ext', 'string')
-
+ 
 Choice.options do
-  banner 'Usage:  waves path/to/app [-h]'
-  option :help  do
+  
+=begin
+  banner 'Usage: waves path/to/app [-h]'
+  option :help do
     long '--help'
     desc 'Show this message'
   end
@@ -28,57 +34,41 @@ Choice.options do
   
   option :template do
     short '-t'
-    long '--template=FOUNDATION'
+    long '--template=TEMPLATE'
     desc "Select a template for app generation (Built-in options: 'classic', 'compact')."
     default "classic"
   end
-  
-end
+=end
 
+  banner 'Usage: waves [server|console|generate] [options]'
+=begin
+  option :help do
+    long 'help <operation>'
+    option :generate do
+      desc 'Usage: waves generate path/to/app [--orm=ORM | --template=TEMPLATE]'
+    end
+  end
+=end
+  option :generate do
+    desc 'generate path/to/app [--orm=ORM | --template=TEMPLATE]'
+  end
+    
+
+end
+ 
 puts "** Waves #{File.read("#{WAVES}/doc/VERSION")}"
-
-available_orms = [ 'sequel' ,  'active_record' , 'none' ]
-orm = Choice.choices.orm.snake_case
-orm_require, orm_include = case orm
-when 'sequel'
-  ["require 'layers/orm/sequel'", "include Waves::Layers::ORM::Sequel"]
-when /active([-_]*)record/
-  ["require 'layers/orm/active_record'", "include Waves::Layers::ORM::ActiveRecord"]
-when 'none'
-  ['', '# This app was generated without an ORM layer.']
+options = ARGV[1..-1]  # from the first to the last, savor every single drop
+case ARGV[0]
+when 'generate'
+  include Bin::Waves::Generate
+  puts Choice.choices.orm
+  generate Choice.choices
+when 'console'
+#  include Bin::Waves::Console
+#  console options
+when 'server'
+#  include Bin::Waves::Server
+#  server options
 else
-  puts "I'm sorry, '#{orm}' is not listed as an available option.\nTry: \t"
-  available_orms.each { |x| puts "\t\t#{x}" }
-  raise ArgumentError
+  raise ArgumentError, "available_commands = w%( generate console server )    # Use 'waves help <command>' for syntax"
 end
-
-app_path = ARGV[0]
-app_name = File.basename(app_path)
-if app_name =~ /[^\w\d_]/
-  raise ArgumentError, <<-TEXT
-  Unusable name: \"#{app_name}\"
-  Application names may contain only letters, numbers, and underscores."
-TEXT
-end
-
-case Choice.choices.template
-when 'classic'
-  template = "#{WAVES}/app/classic"
-when 'compact'
-  template = "#{WAVES}/app/compact"
-else
-  puts "I'm sorry, '#{Choice.choices.template}' is not an available option."
-  raise ArgumentError
-end
-
-generator = Rakegen.new("waves:app") do |gen|
-  gen.source = template
-  gen.target = app_path
-  gen.template_assigns = {:name => app_name.camel_case, :orm_require => orm_require, :orm_include => orm_include }
-end
-
-puts "** Creating new Waves application ..."
-
-Rake::Task["waves:app"].invoke
-
-puts "** Application created!"
