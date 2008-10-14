@@ -5,47 +5,64 @@ module Waves
     
     def self.run( options )
       @manager ||= new( options )
-      @manager.start ; self
+      @manager.start
     end
     
-    class << self ; private :new, :dup, :clone ; end
     def self.instance ; @manager ; end
+    class << self ; private :new, :allocate ; end
+    private :dup, :clone
     
     def start
-      daemonize if options[ :daemon ]
-      set_traps ; start_logger ; start_console
+      pid = daemonize if options[ :daemon ]
+      return pid if pid
+      start_logger ; set_traps
       start_debugger if options[ :debugger ]
-      start_servers ; Process.waitall
+      start_servers ; start_monitor ; start_console
+      sleep 60 while true
     end
     
     def stop
       Waves::Logger.info "Manager shutting down ..."
-      @console.stop ; stop_servers ; exit
+      @console.stop if @console ; @monitor.stop if @monitor
+      stop_servers ; Process.waitall ; exit
     end
     
     def restart
-      stop_servers ; start_servers
+      stop_servers; start_servers
     end
     
+    private
+    
     def daemonize
-      pwd = Dir.pwd ; exit if fork ; Dir.chdir( pwd )
+      pwd = Dir.pwd ; pid = fork ; return pid if pid ; Dir.chdir( pwd )
       File.umask 0000 ; STDIN.reopen( '/dev/null') ; 
       STDOUT.reopen( '/dev/null', 'a' ) ; STDERR.reopen( STDOUT )
+      nil # return nil for child process, just like fork does
     end
     
     def set_traps
       safe_trap( 'HUP' ) { restart }
-      safe_trap( 'INT' ) { stop }
+      safe_trap( 'TERM','INT' ) { stop }
     end
     
     def start_logger
       Waves::Logger.start
-      Waves::Logger.info "Waves #{Waves.version} starting up ..."
+      Waves::Logger.info "Manager starting up ..."
     end
     
     def start_console
-      @console = LiveConsole.new( config.console )
-      @console.run
+      if config.console
+        @console = config.console ; @console.run
+        Waves::Logger.info "Console started on port #{config.console}"
+      end
+    end
+    
+    def start_monitor
+      unless config.debug
+        @monitor = Waves.config.monitor
+        pid = @monitor.start( self )
+        Waves::Logger.info "Monitor started with PID #{pid}"
+      end
     end
     
     def start_debugger
