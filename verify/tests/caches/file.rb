@@ -1,5 +1,4 @@
 require "#{File.dirname(__FILE__)}/helpers"
-
 require 'caches/file'
 
 describe "Waves::Caches::File" do

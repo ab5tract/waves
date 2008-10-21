@@ -9,21 +9,21 @@ module Waves
       end
 
       def store( key,value, ttl = 0, marshal = true )
-        cache = @cache.clone;  cache.add( key.to_s, value, ttl, marshal );  cache.destroy
+        cache = @cache.clone;  cache.add( key.to_s, value, ttl, marshal )
       end
 
       def fetch( key )
-        cache = @cache.clone;  cache.get( key.to_s );  cache.destroy
+        cache = @cache.clone;  cache.get( key.to_s )
       rescue ::Memcached::NotFound => e
         nil
       end
 
       def delete( key )
-        cache = @cache.clone; cache.delete( key.to_s );  cache.destroy
+        cache = @cache.clone; cache.delete( key.to_s )
       end
 
       def clear
-        cache = @cache.clone;  cache.flush;  cache.destroy
+        cache = @cache.clone;  cache.flush
       end
 
     end

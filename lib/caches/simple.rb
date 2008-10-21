@@ -21,5 +21,9 @@ module Waves
       
     end
 
+#    class SynchronizedSimple < Synchronized
+#      def initialize(args); super( Simple.new(args) ); end
+#    end
+
   end
 end
