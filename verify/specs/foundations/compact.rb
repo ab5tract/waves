@@ -1,9 +1,5 @@
 # require 'test_helper' because RubyMate needs help
 require "#{File.dirname(__FILE__)}/helpers"
-require 'foundations/compact'
-
-clear_all_apps
-module CompactApplication ; include Waves::Foundations::Compact ; end
 
 describe "An application module which includes the Simple foundation" do
 

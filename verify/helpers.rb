@@ -1,18 +1,23 @@
-require 'rubygems'
-%w( bacon facon ).each { |f| require f }
+require 'rubygems'; %w{ bacon facon }.each { |dep| require dep }
 
-# Prepend the framework lib to the loadpath
+# Framework lib goes to the front of the loadpath
 $:.unshift( File.join(File.dirname(__FILE__), "..", "lib") )
 require 'waves'
+require 'runtime/bench'
+
+# Fire up the Bench runtime
+Waves::Bench.load
 
 Bacon.extend Bacon::TestUnitOutput
+# Bacon.extend Bacon::SpecDoxOutput
+# Bacon.extend Bacon::TapOutput
 Bacon.summary_on_exit
+
 
 # Define a default CompactApplication for use across tests
 require 'foundations/compact'
 module CompactApplication ; include Waves::Foundations::Compact ; end
 
-# Waves::Verify::Helpers
 module Waves
   module Verify
     module Helpers
@@ -21,73 +26,45 @@ module Waves
         it(desc, &block) if defined?(VERIFY_FEATURES)
       end
       
-      def bug(desck, &block)
+      def bug(desc, &block)
         it(desc, &block) if defined?(VERIFY_BUGS)
       end
       
-      def ugly_warning(why)
-        if defined?(FIND_UGLY)
+      def ugly(why)
+        if defined?(VERIFY_UGLY)
           warn "\n#{why} in:"
           warn Kernel.caller(2).join("\n") 
         end
       end
       
+      # def wrap(&block)
+      #   @before << block
+      #   @after << block
+      # end
+            
       def clear_all_apps
         Waves.instance_variable_set(:@applications, nil)
-      end
-      
-      # Stubs the configuration, to allow waves_request to work
-      # One reason this is needed is that a Waves::Request's session uses
-      # the current configuration to determine the file store directory and
-      # the session expiration time.
-      def fake_out_runtime
-        ugly_warning "Faking out runtime"
-        runtime = mock( "runtime")
-        runtime.stub!(:config).and_return( Waves.main[:configurations][:development] )
-        Waves::Runtime.stub!(:instance).and_return(runtime)
-      end
-
-      def mappings(&block)
-        m = ::Waves::Runtime.instance.mapping
-        if block
-          m.instance_eval(&block)
-        end
-        m
-      end
-      
-      # mapping helper methods (of dubious utility?)
-      %w{ path url always handle threaded generator}.each do |method|
-        module_eval "def #{method}(*args,&block); mappings.#{method}(*args,&block);end"
-      end
-      
-      # generate a mock Rack request against the default dispatcher.
-      # this must change if we ever do different dispatchers
-      def mock_request
-        ugly_warning "Hard-coded use of Waves::Dispatchers::Default"
-        @request ||= ::Rack::MockRequest.new( ::Waves::Dispatchers::Default.new )
-      end
-
-      def waves_request(*args)
-        Waves::Request.new(Rack::MockRequest.env_for(*args))
-      end
-
-      def env_for(uri="/", options={})
-        Rack::MockRequest.env_for(uri,options)
-      end
-
-      def get(uri, opts={})    mock_request.get(uri, opts)    end
-      def post(uri, opts={})   mock_request.post(uri, opts)   end
-      def put(uri, opts={})    mock_request.put(uri, opts)    end
-      def delete(uri, opts={}) mock_request.delete(uri, opts) end
-
-      def wrap(&block)
-        @before << block
-        @after << block
       end
 
       def rm_if_exist(name)
         FileUtils.rm name if File.exist? name
       end
+      
+      # generate a mock Rack request against the default dispatcher.
+      # this must change if we ever do different dispatchers
+      def mock_request
+        ugly "Hard-coded use of Waves::Dispatchers::Default"
+        @request ||= ::Rack::MockRequest.new( ::Waves::Dispatchers::Default.new )
+      end
+
+      def waves_request( *args )
+        Waves::Request.new( Rack::MockRequest.env_for(*args) )
+      end
+
+      def env_for( uri="/", options={} )
+        Rack::MockRequest.env_for(uri,options)
+      end
+
       
       # example rack environment
       def rack_env
@@ -127,10 +104,5 @@ Bacon::Context.module_eval do
   alias_method :specify, :it
 end
 
-module Kernel
-  private
-  # some people like to use "specification" instead of "describe"
-  def specification(name, &block)  Bacon::Context.new(name, &block) end
-end
 
 
