@@ -2,16 +2,16 @@ require "#{File.dirname(__FILE__)}/helpers"
 require 'foundations/compact'
 require 'caches/simple'
 
-module SimpleApp ; include Waves::Foundations::Compact ; end
+module CompactApp ; include Waves::Foundations::Compact ; end
 
 describe "can assign a Waves::Caches::Simple object to Waves.cache" do
-  module SimpleApp
+  module CompactApp
     Waves.cache Waves::Caches::Simple.new
   end
 end
 
 describe "can store and fetch, including implementation-wide methods" do
-  module SimpleApp
+  module CompactApp
     Waves.cache.store :frog, "hopping"
     Waves.cache[:ball] = "dropping"
         
@@ -20,7 +20,7 @@ describe "can store and fetch, including implementation-wide methods" do
 end
 
 describe "can delete and clear" do
-  module SimpleApp
+  module CompactApp
     Waves.cache.delete :frog
     Waves.cache.fetch(:frog).should == nil
     

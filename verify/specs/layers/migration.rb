@@ -4,7 +4,7 @@ require 'layers/orm/migration'
 
 ORM = Waves::Layers::ORM
 
-Dir.chdir("#{File.dirname(__FILE__)}/../../samples/blog") do
+Dir.chdir("#{File.dirname(__FILE__)}/../../../samples/blog") do
 
   describe "Waves::Layers::ORM migration helpers" do
   

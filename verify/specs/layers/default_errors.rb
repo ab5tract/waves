@@ -1,6 +1,7 @@
 # require 'test_helper' because RubyMate needs help
 require "#{File.dirname(__FILE__)}/helpers"
 require 'foundations/compact'
+require 'layers/default_errors'
 
 module DefaultErrorsApp
   include Waves::Foundations::Compact
@@ -16,8 +17,7 @@ module DefaultErrorsApp
   stub!(:views).and_return(Views)
 end
 
-# Waves << DefaultErrorsApp
-Waves::Console.load( :mode => :development )
+#Waves::Console.load( :mode => :development )
 
 
 describe "An application which includes the DefaultErrors layer" do

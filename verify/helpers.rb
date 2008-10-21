@@ -8,8 +8,11 @@ require 'waves'
 Bacon.extend Bacon::TestUnitOutput
 Bacon.summary_on_exit
 
+# Define a default CompactApplication for use across tests
+require 'foundations/compact'
+module CompactApplication ; include Waves::Foundations::Compact ; end
 
-
+# Waves::Verify::Helpers
 module Waves
   module Verify
     module Helpers
