@@ -18,8 +18,6 @@ module Blog
       
       server Waves::Servers::Mongrel
 
-
-
     end
 
   end
